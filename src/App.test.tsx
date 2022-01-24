@@ -1,29 +1,76 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import App from './App';
+import 'jest-styled-components';
+import reportWebVitals from 'reportWebVitals';
 
 describe('<App />', () => {
   it('renders component correctly', () => {
-    const { container } = render(<App />);
+    const {container} = render(<App />);
 
-    const linkElement = screen.getByText(/learn react/i);
-    expect(linkElement).toBeInTheDocument();
+    const toDoList = screen.getByTestId('toDoList');
+    expect(toDoList).toBeInTheDocument();
+    expect(toDoList.firstChild).toBeNull();
 
-    const appLogo = screen.getByAltText('logo');
-    expect(appLogo).toBeInTheDocument();
-    expect(appLogo).toHaveAttribute('src', 'logo.svg');
-
-    expect(container.getElementsByTagName('p')).toHaveLength(1);
-    expect(container.getElementsByTagName('p')[0]).toHaveTextContent(
-      'Edit src/App.tsx and save to reload.'
-    );
+    const inputPlaceholder = '할 일을 입력해 주세요';
+    const input = screen.getByPlaceholderText(inputPlaceholder);
+    expect(input).toBeInTheDocument();
+    const label = screen.getByText('추가');
+    expect(label).toBeInTheDocument();
 
     expect(container).toMatchSnapshot();
   });
-});
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  it ('adds and deletes ToDo items', () => {
+    render(<App />);
+
+    const addButtonText = '추가';
+    const deleteButtonText = '삭제';
+    const inputPlaceholder = '할 일을 입력해 주세요';
+    const inputValue_1 = 'study react 1';
+    const inputValue_2 = 'study react 2';
+    const testId_ToDoList = 'toDoList';
+
+    const input = screen.getByPlaceholderText(inputPlaceholder);
+    const addButton = screen.getByText(addButtonText);
+    fireEvent.change(input, { target: { value: inputValue_1 } });
+    fireEvent.click(addButton);
+
+    const todoItem_1 = screen.getByText(inputValue_1);
+    expect(todoItem_1).toBeInTheDocument();
+
+    const deleteButton = screen.getByText(deleteButtonText);
+    expect(deleteButton).toBeInTheDocument();
+
+    const toDoList = screen.getByTestId(testId_ToDoList);
+    expect(toDoList.childElementCount).toBe(1);
+
+    fireEvent.change(input, { target: {value: inputValue_2 } });
+    fireEvent.click(addButton);
+
+    const todoItem_2 = screen.getByText(inputValue_2);
+    expect(todoItem_2).toBeInTheDocument();
+    expect(toDoList.childElementCount).toBe(2);
+
+    const deleteButtons = screen.getAllByText(deleteButtonText);
+    fireEvent.click(deleteButton);
+
+    expect(todoItem_1).not.toBeInTheDocument();
+    expect(toDoList.childElementCount).toBe(1);
+  });
+
+  it ('does not add empty ToDo', () => {
+    render(<App />);
+
+    const addButtonText = '추가';
+    const testId_ToDoList = 'toDoList';
+
+    const toDoList = screen.getByTestId(testId_ToDoList);
+    const length = toDoList.childElementCount;
+
+    const addButton = screen.getByText(addButtonText);
+    fireEvent.click(addButton);
+
+    expect(toDoList.childElementCount).toBe(length);
+  });
 });

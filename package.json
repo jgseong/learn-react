@@ -57,5 +57,11 @@
     "jest-styled-components": "^7.0.8",
     "lint-staged": "^12.1.7",
     "prettier": "^2.5.1"
+  },
+  "jest": {
+    "coveragePathIgnorePatterns" : [
+      "src/index.tsx",
+      "src/reportWebVitals.ts"
+    ]
   }
 }
