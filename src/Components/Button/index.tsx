@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Styled from 'styled-components';
 
 interface ContainerProps {
@@ -32,19 +32,34 @@ interface Props {
   readonly onClick?: () => void;
 }
 
-export const Button = ({ 
-  label,
-  backgroundColor = '#304FFE',
-  hoverColor = '#1E40FF',
-  onClick
-}: Props) => {
-  return (
-    <Container 
-      backgroundColor={backgroundColor} 
-      hoverColor={hoverColor}
-      onClick={onClick}
-    >
-      <Label>{label}</Label>
-    </Container>
-  );
+export class Button extends Component<Props> {
+  render() {
+    const {
+      label,
+      backgroundColor = '#304FFE',
+      hoverColor = '#1E40FF',
+      onClick,
+    } = this.props;
+
+    return (
+      <Container 
+        backgroundColor={backgroundColor} 
+        hoverColor={hoverColor}
+        onClick={onClick}
+      >
+        <Label>{label}</Label>
+      </Container>
+    );
+  }
 }
+
+/* 
+  To use 'props' with 'state', 
+
+  interface Props {}
+  interface State {}
+  
+  export class Button extends Component<Props, State> { 
+    ...
+  }
+  */
