@@ -16,8 +16,11 @@ interface Props {
   readonly onAdd?: () => void;
 }
 */
+interface Props {
+  readonly onAdd?: () => void;
+}
 
-export const InputContainer = () => {
+export const InputContainer = ({ onAdd }: Props) => {
   const [toDo, setToDo] = useState('');
   const { addToDo } = useContext(ToDoListContext);
   return (
@@ -26,6 +29,9 @@ export const InputContainer = () => {
       <Button label="추가" onClick={() => {
         addToDo(toDo);
         setToDo('');
+        if (toDo && typeof onAdd === 'function') {
+          onAdd();
+        }
       }} />
     </Container>
   );
