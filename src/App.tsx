@@ -1,7 +1,7 @@
 import React from 'react';
 import Styled from 'styled-components';
 import { PageHeader, Button } from 'Components';
-import { List } from 'Pages';
+import { List, Add } from 'Pages';
 
 const Container = Styled.div`
   min-height: 100vh;
@@ -16,7 +16,8 @@ function App() {
   return (
     <Container>
       <PageHeader />
-      <List />
+      {/* <List /> */}
+      <Add />
       {/* <Button label = "추가" /> */}
     </Container>
   );
