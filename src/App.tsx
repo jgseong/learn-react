@@ -1,7 +1,8 @@
 import React from 'react';
 import Styled from 'styled-components';
-import { PageHeader, Button } from 'Components';
-import { List, Add } from 'Pages';
+import { Switch, Route } from 'react-router-dom';
+import { PageHeader } from 'Components';
+import { List, Add, Detail, NotFound } from 'Pages';
 
 const Container = Styled.div`
   min-height: 100vh;
@@ -16,9 +17,20 @@ function App() {
   return (
     <Container>
       <PageHeader />
-      {/* <List /> */}
-      <Add />
-      {/* <Button label = "추가" /> */}
+      <Switch>
+        <Route exact path="/">
+          <List />
+        </Route>
+        <Route exact path="/add">
+          <Add />
+        </Route>
+        <Route exact path="/detail/:id">
+          <Detail />
+        </Route>
+        <Route>
+          <NotFound />
+        </Route>
+      </Switch>
     </Container>
   );
 }
